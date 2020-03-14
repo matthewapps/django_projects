@@ -16,6 +16,30 @@ def index(request):
     response = requests.request("GET", url, headers=headers, data = payload)
 
     print(response.text.encode('utf8'))
+    matt = response.json()
+    print ("\n \n")
+
+    users_data=[]
+
+    for i in matt:
+        print('uuid  : ' + i['uuid'])
+        print('applicationUuid : ' + i['applicationUuid'])
+        print ('applicationUserId : '+ i['applicationUserId'])
+        print('referenceId : ' + i['referenceId'])
+        print('institutionConsents : ' + i['institutionConsents'][0]['institutionId'])
+        print("\n \n")
+        banking_user = {
+            'uuid' : i['uuid'],
+            'applicationUuid' : i['applicationUuid'],
+            'applicationUserId' : i['applicationUserId'],
+            'referenceId': i['referenceId'],
+            'institutionConsents':  i['institutionConsents'][0]['institutionId'],
+
+        }
+        users_data.append(banking_user)
+
+    print(users_data)
+    print(response.json())
 
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=16425e59cea49695c57071000f04e977'
 
@@ -42,5 +66,5 @@ def index(request):
 
         weather_data.append(city_weather)
 
-    context = {'weather_data' : weather_data, 'form' : form}
+    context = {'users_data' : users_data,'weather_data' : weather_data, 'form' : form}
     return render(request, 'weather/weather.html', context)
